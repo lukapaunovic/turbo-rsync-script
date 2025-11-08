@@ -3,7 +3,13 @@
 **High-performance rsync wrapper with parallel transfer for large files**
 
 A robust Bash script for efficient remote synchronization with automatic parallelization of large files, resume capability, and WAN-optimized SSH settings.
+# SPONSORED
 
+This tool is sponsored by **Fastest NVMe, i9 VPS Hosting**  
+<https://dcx.rs/en/vps-eu/>
+
+High-performance KVM VPS with NVMe Gen4 storage and Intel i9 CPUs.
+Suitable for heavy workloads, WordPress/WooCommerce, cloud apps, CI/CD, containers and database servers.
 ---
 
 ## Table of Contents
