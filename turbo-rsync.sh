@@ -63,17 +63,40 @@ echo "=== MAIN SYNC (resumable, without partial-dir) ==="
   --rsync-path="${REMOTE_WRAPPER}" \
   "${SRC}" "${DST}"
 echo "=== PARALLEL SYNC (> ${BIG}) ==="
-RELATIVE_OPT=()
-[[ "$USE_RELATIVE" -eq 1 ]] && RELATIVE_OPT=(--relative)
-ORIG_PWD="$PWD"
-cd "$SRC"
-find . -type f -size "+${BIG}" -print0 |
-  xargs -0 -P "$PAR" -I{} \
-    "${NICE_LOCAL[@]}" rsync "${RSYNC_BASE_OPTS[@]}" \
-      --partial --inplace --append-verify \
-      "${RELATIVE_OPT[@]}" \
-      --rsync-path="${REMOTE_WRAPPER}" \
-      -e "ssh ${SSHOPTS[*]}" \
-      "{}" "$DST"
-cd "$ORIG_PWD"
+
+# PRE-CHECK:
+# Before running heavy parallel rsync, check if there are *actually*
+# any pending transfers > $BIG. If not, skip the entire parallel stage.
+PENDING_BIG=$(
+  rsync -ni --itemize-changes \
+    --min-size="${BIG}" \
+    --partial --inplace --append-verify \
+    -e "ssh ${SSHOPTS[*]}" \
+    "${SRC}" "${DST}" \
+  | awk '/^>/{c++} END{print c+0}'
+)
+
+if [[ "${PENDING_BIG}" -eq 0 ]]; then
+  echo "=== PARALLEL SYNC skipped (no pending files > ${BIG}) ==="
+else
+  echo "=== PARALLEL SYNC starting (${PENDING_BIG} pending large files) ==="
+
+  RELATIVE_OPT=()
+  [[ "$USE_RELATIVE" -eq 1 ]] && RELATIVE_OPT=(--relative)
+
+  ORIG_PWD="$PWD"
+  cd "$SRC"
+
+  # Parallel rsync only for large files
+  find . -type f -size "+${BIG}" -print0 \
+  | xargs -0 -P "$PAR" -I{} \
+      "${NICE_LOCAL[@]}" rsync "${RSYNC_BASE_OPTS[@]}" \
+        --partial --inplace --append-verify \
+        "${RELATIVE_OPT[@]}" \
+        --rsync-path="${REMOTE_WRAPPER}" \
+        -e "ssh ${SSHOPTS[*]}" \
+        "{}" "$DST"
+
+  cd "$ORIG_PWD"
+fi
 echo "=== SYNC COMPLETE ==="
