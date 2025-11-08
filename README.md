@@ -60,19 +60,19 @@ ionice --version   # Optional but recommended
 ### Quick install:
 ```bash
 # Download the script
-curl -O https://raw.githubusercontent.com/yourusername/turbo-rsync-script/main/turbo-rsync-script.sh
+curl -O https://raw.githubusercontent.com/lukapaunovic/turbo-rsync-script/main/turbo-rsync.sh
 
 # Make executable
-chmod +x turbo-rsync-script.sh
+chmod +x turbo-rsync.sh
 
 # Optional: Install to PATH
-sudo mv turbo-rsync-script.sh /usr/local/bin/turbo-rsync-script
+sudo mv turbo-rsync.sh /usr/local/bin/turbo-rsync-script
 ```
 
 ### Manual installation:
 1. Copy the script to your system
 2. Edit the configuration section (lines 4-10)
-3. Make it executable: `chmod +x turbo-rsync-script.sh`
+3. Make it executable: `chmod +x turbo-rsync.sh`
 
 ---
 
@@ -80,25 +80,25 @@ sudo mv turbo-rsync-script.sh /usr/local/bin/turbo-rsync-script
 
 ### Basic usage:
 ```bash
-./turbo-rsync-script.sh
+./turbo-rsync.sh
 ```
 
 ### With environment variables:
 ```bash
 # Test run without transferring
-DRY_RUN=1 ./turbo-rsync-script.sh
+DRY_RUN=1 ./turbo-rsync.sh
 
 # Use 8 parallel processes
-PARALLEL=8 ./turbo-rsync-script.sh
+PARALLEL=8 ./turbo-rsync.sh
 
 # Change large file threshold to 100MB
-BIG_SIZE=100M ./turbo-rsync-script.sh
+BIG_SIZE=100M ./turbo-rsync.sh
 
 # Disable --relative mode
-USE_RELATIVE=0 ./turbo-rsync-script.sh
+USE_RELATIVE=0 ./turbo-rsync.sh
 
 # Combine options
-DRY_RUN=1 PARALLEL=6 BIG_SIZE=128M ./turbo-rsync-script.sh
+DRY_RUN=1 PARALLEL=6 BIG_SIZE=128M ./turbo-rsync.sh
 ```
 
 ---
@@ -196,13 +196,13 @@ find . -type f -size "+64M" -print0 |
 ### Examples:
 ```bash
 # Test with 4 parallel processes
-DRY_RUN=1 PARALLEL=4 ./turbo-rsync-script.sh
+DRY_RUN=1 PARALLEL=4 ./turbo-rsync.sh
 
 # Transfer with 100MB threshold
-BIG_SIZE=100M ./turbo-rsync-script.sh
+BIG_SIZE=100M ./turbo-rsync.sh
 
 # Disable relative paths
-USE_RELATIVE=0 ./turbo-rsync-script.sh
+USE_RELATIVE=0 ./turbo-rsync.sh
 ```
 
 ---
@@ -241,19 +241,19 @@ USE_RELATIVE=0 ./turbo-rsync-script.sh
 ### **Adjust parallel processes based on CPU/network:**
 ```bash
 # Low-end system or slow network
-PARALLEL=2 ./turbo-rsync-script.sh
+PARALLEL=2 ./turbo-rsync.sh
 
 # High-performance system with fast network
-PARALLEL=8 ./turbo-rsync-script.sh
+PARALLEL=8 ./turbo-rsync.sh
 ```
 
 ### **Fine-tune large file threshold:**
 ```bash
 # Many small files? Increase threshold
-BIG_SIZE=128M ./turbo-rsync-script.sh
+BIG_SIZE=128M ./turbo-rsync.sh
 
 # Few large files? Decrease threshold
-BIG_SIZE=32M ./turbo-rsync-script.sh
+BIG_SIZE=32M ./turbo-rsync.sh
 ```
 
 ### **Disable ionice/nice for maximum speed:**
@@ -283,7 +283,7 @@ SRC="/var/www/html/"
 DST="user@backup-server:/backups/www/"
 PAR=4
 BIG="100M"
-./turbo-rsync-script.sh
+./turbo-rsync.sh
 ```
 
 ### **Example 2: Backup media library**
@@ -291,22 +291,22 @@ BIG="100M"
 # Large video files benefit from parallelization
 SRC="/media/videos/"
 DST="nas@192.168.1.100:/volume1/backups/"
-PARALLEL=6 BIG_SIZE=500M ./turbo-rsync-script.sh
+PARALLEL=6 BIG_SIZE=500M ./turbo-rsync.sh
 ```
 
 ### **Example 3: Initial sync (test first)**
 ```bash
 # 1. Test what will be synced
-DRY_RUN=1 ./turbo-rsync-script.sh
+DRY_RUN=1 ./turbo-rsync.sh
 
 # 2. If looks good, run for real
-./turbo-rsync-script.sh
+./turbo-rsync.sh
 ```
 
 ### **Example 4: Resume interrupted transfer**
 ```bash
 # Just re-run the script - it will resume automatically
-./turbo-rsync-script.sh
+./turbo-rsync.sh
 ```
 
 ---
@@ -339,8 +339,8 @@ RSYNC_BASE_OPTS=(
 ### **Q: Can I sync to multiple destinations?**
 **A:** No, but you can run multiple instances:
 ```bash
-DST="server1:/path/" ./turbo-rsync-script.sh &
-DST="server2:/path/" ./turbo-rsync-script.sh &
+DST="server1:/path/" ./turbo-rsync.sh &
+DST="server2:/path/" ./turbo-rsync.sh &
 wait
 ```
 
