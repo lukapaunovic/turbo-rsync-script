@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # CONFIGURABLE
-SRC="/mnt/BLOCKSTORAGE/home/master/applications/zcmmqjrfsf/public_html/" # Replace
-DST="root@XX.XX.XX.XX:/home/zcmmqjrfsf/web/website.com/public_html/" # Replace
+# Source directory (trailing slash = copy contents)
+SRC="/path/to/source/"
+# Destination (user@host:/path/)
+DST="user@host:/path/to/destination/"
 PAR="${PARALLEL:-3}"
 BIG="64M"
 USE_RELATIVE="${USE_RELATIVE:-1}"
